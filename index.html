@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#285c49">
+  <meta name="description" content="과제별 제약조건을 한곳에서 확인하고, 한 번에 복사하세요.">
+  <title>과제 모음 · ALEPH</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./data.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <div class="layout">
+    <aside class="sidebar">
+      <a class="brand" href="./" aria-label="ALEPH 과제 모음 홈"><span class="brand-mark">a<span>↗</span></span><span>ALEPH<small>함께 만드는 배움</small></span></a>
+      <div class="side-title">LEARNING LIBRARY</div>
+      <div class="collection-label">과제 모음 <span id="assignment-count"></span></div>
+      <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="search" type="search" placeholder="과제 이름, 번호 검색" aria-label="과제 이름 또는 번호 검색"></label>
+      <nav id="assignment-nav" aria-label="과제 목록"></nav>
+      <p id="empty-search" hidden>검색된 과제가 없습니다.</p>
+      <div class="sidebar-bottom"><span class="status-dot"></span>새로운 과제도 이곳에 차곡차곡<p>필요한 조건을 담아, 바로 시작하세요.</p></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar"><span>자료실 <span class="breadcrumb-slash">/</span> <strong>과제 제약조건</strong></span><a href="https://github.com/SKT-ALEPH/share_homework" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></header>
+      <main id="main" tabindex="-1">
+        <div class="intro"><div><p class="eyebrow">LESS SEARCHING, MORE MAKING</p><h1>시작은 가볍게,<br class="mobile-break"> 조건은 빠짐없이.</h1><p>과제를 고르고, 필요한 제약조건을 한 번에 복사하세요.</p></div><div class="intro-art" aria-hidden="true"><div class="paper back"></div><div class="paper front"><span>✓</span><i></i><span>✓</span><i></i><span>✓</span><i></i></div><b>✳</b></div></div>
+        <section class="assignment" aria-labelledby="assignment-title">
+          <div class="assignment-heading"><div><div class="assignment-meta"><span id="assignment-badge" class="badge"></span><span id="assignment-time"></span></div><h2 id="assignment-title"></h2><p id="assignment-description"></p></div></div>
+          <div class="toolbar"><div class="tabs" role="tablist" aria-label="보기 방식"><button id="criteria-tab" role="tab" aria-selected="true" aria-controls="criteria-panel" type="button">제약조건 <span id="criteria-count"></span></button><button id="original-tab" role="tab" aria-selected="false" aria-controls="original-panel" tabindex="-1" type="button">원문 전체</button></div><button id="copy-all" class="button primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>제약조건 전체 복사</span></button></div>
+          <div class="reading-note" id="reading-note"><span aria-hidden="true">ⓘ</span> 원문의 ‘통과 기준’을 카드별로 모았습니다. 기준 번호와 문구는 원문 그대로입니다.</div>
+          <div id="criteria-panel" role="tabpanel" aria-labelledby="criteria-tab" tabindex="0"></div>
+          <div id="original-panel" role="tabpanel" aria-labelledby="original-tab" tabindex="0" hidden><pre id="original-text"></pre></div>
+          <div class="assignment-footer"><span id="source-info"></span><a id="download" download>원문 TXT 내려받기 <span aria-hidden="true">↓</span></a></div>
+        </section>
+        <footer class="page-footer"><span>ALEPH · 과제 모음</span><span>하나씩 모으고, 함께 나누기.</span></footer>
+      </main>
+    </div>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="copy-dialog"><h2>텍스트 복사</h2><p>자동 복사가 제한되어 있습니다. 아래 내용을 선택해 복사해 주세요.</p><textarea id="manual-copy" readonly aria-label="복사할 텍스트"></textarea><button id="close-dialog" class="button primary" type="button">닫기</button></dialog>
+  <noscript>과제 목록을 보려면 JavaScript를 켜 주세요. <a href="./assignments/assignment-01.txt">과제 1 원문</a> · <a href="./assignments/assignment-02.txt">과제 2 원문</a> · <a href="./assignments/assignment-03.txt">과제 3 원문</a> · <a href="./assignments/assignment-05.txt">과제 5 원문</a> · <a href="./assignments/assignment-06.txt">과제 6 원문</a></noscript>
+</body>
+</html>
