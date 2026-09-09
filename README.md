@@ -24,6 +24,6 @@ Node.js 22 이상에서 `npm start` 후 http://127.0.0.1:4173 에 접속합니�
 
 GitHub 저장소 Settings → Pages에서 `Deploy from a branch`, `main`, `/(root)`로 설정합니다. 이후 `main`에 푸시할 때 자동으로 배포됩니다.
 
-예정 주소: https://skt-aleph.github.io/share_homework/
+공개 주소: https://skt-aleph.github.io/share_homework/
 
 외부 글꼴을 불러올 수 없으면 시스템 글꼴로 표시됩니다. 과제 데이터와 기능은 별도 서버 없이 작동합니다.

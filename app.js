@@ -129,5 +129,9 @@ for (const name of ['criteria', 'original']) {
     $(next + '-tab').focus();
   });
 }
-window.addEventListener('hashchange', () => { selectAssignment(); window.scrollTo({ top: 0 }); });
+window.addEventListener('hashchange', () => {
+  if (!/^#assignment-\d+$/.test(location.hash)) return;
+  selectAssignment();
+  window.scrollTo({ top: 0 });
+});
 selectAssignment();
