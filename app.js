@@ -63,7 +63,7 @@ function changeView(next) {
     $(name + '-tab').tabIndex = name === view ? 0 : -1;
     $(name + '-panel').hidden = name !== view;
   }
-  $('copy-all').querySelector('span').textContent = view === 'criteria' ? '제약조건 전체 복사' : '원문 전체 복사';
+  $('copy-all').querySelector('span').textContent = view === 'criteria' ? '제약조건만 복사' : '원문만 복사';
   $('reading-note').hidden = view !== 'criteria';
 }
 function selectAssignment() {
@@ -117,6 +117,7 @@ function selectAssignment() {
   changeView('criteria');
 }
 $('search').addEventListener('input', drawNav);
+$('copy-assignment').addEventListener('click', () => copy(`아래 과제의 주제와 제출물, 카드별 지침, 모든 통과 기준을 반영해 과제를 진행해 주세요.\n\n${current.raw.trim()}`, `과제 ${current.number}의 주제부터 모든 제약조건까지 복사했습니다. 다른 LLM에 붙여넣으세요.`));
 $('copy-all').addEventListener('click', () => copy(view === 'criteria' ? fullCriteria(current) : current.raw, `과제 ${current.number} ${view === 'criteria' ? '제약조건' : '원문'} 전체를 복사했습니다.`));
 $('close-dialog').addEventListener('click', () => $('copy-dialog').close());
 for (const name of ['criteria', 'original']) {
