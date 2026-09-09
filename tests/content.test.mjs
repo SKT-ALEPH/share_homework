@@ -26,12 +26,17 @@ test('malformed or duplicate criteria stop publication instead of disappearing s
   assert.throws(() => parseAssignment('과제 1\n제목\n왜 이걸 하는가\n카드 1 — 검사\nT02-C01 잘못된 과제', 'test'));
 });
 
-test('published T04 fixture files retain every source-manifest byte count and SHA-256', async () => {
-  const root = new URL('../assets/studio-task-assets/t04-real-information-board/', import.meta.url);
-  const manifest = JSON.parse(await readFile(new URL('asset-manifest.json', root), 'utf8'));
-  for (const file of manifest.files) {
-    const bytes = await readFile(new URL(file.path, root));
-    assert.equal(bytes.length, file.bytes, file.path);
+test('T04 offers exactly the four original attachments with unchanged names and bytes', async () => {
+  const resources = JSON.parse(await readFile(new URL('../assignments/resources.json', import.meta.url), 'utf8'));
+  const links = resources['4'].links;
+  assert.deepEqual(links.map(link => link.label), [
+    'orbit-iss-board-a5c034dea460468029e4618f45a47ac5a75bda2b.zip',
+    'README (2).md', 'public-contract (1).json', 'asset-manifest (1).json'
+  ]);
+  for (const file of links) {
+    const bytes = await readFile(new URL('../' + file.path, import.meta.url));
     assert.equal(createHash('sha256').update(bytes).digest('hex'), file.sha256, file.path);
+    assert.equal(file.path.split('/').at(-1), file.label);
+    assert.equal(file.download, true);
   }
 });

@@ -1025,29 +1025,32 @@ window.ASSIGNMENTS = [
 ];
 window.ASSIGNMENT_RESOURCES = {
   "4": {
-    "note": "과제 본문은 통과 기준 27개이며, 첨부 공개 계약·조건 목록은 35개를 명시합니다. 첨부 자료에는 t04_day 영수증과 소스 commit URL 요건도 있습니다. 본문과 첨부 자료를 각각 보존했으므로 적용 기준의 차이를 확인하세요.",
-    "description": "ZIP에서 공개 시험자료 18개만 추출했습니다. 합성 입력 9개와 참조 adapter를 포함하며, manifest에 기재된 17개 파일의 SHA-256이 모두 일치합니다. 전체 복사에 아래 자료 링크와 안내가 함께 포함됩니다.",
+    "note": "제공받은 원본 파일 4개입니다. 파일명과 파일 내용을 그대로 보존했습니다.",
+    "description": "전체 복사에 아래 원본 4개의 다운로드 링크가 함께 포함됩니다.",
     "links": [
       {
-        "label": "공개 시험자료 ZIP · 추출본",
-        "path": "assets/studio-task-assets/t04-real-information-board-public-v1.zip",
-        "download": true
+        "label": "orbit-iss-board-a5c034dea460468029e4618f45a47ac5a75bda2b.zip",
+        "path": "assets/studio-task-assets/t04-originals/orbit-iss-board-a5c034dea460468029e4618f45a47ac5a75bda2b.zip",
+        "download": true,
+        "sha256": "153ace7c9c967e3f38e8960997e7ad000721f5c32b2df43ddb454b7d05e48f23"
       },
       {
-        "label": "자료 안내 README",
-        "path": "assets/studio-task-assets/t04-real-information-board/README.md"
+        "label": "README (2).md",
+        "path": "assets/studio-task-assets/t04-originals/README (2).md",
+        "download": true,
+        "sha256": "b9d0d4c076f8c1e1d9faf1a42d5bea42b0c47e5018e8f46af31f3798adc8d80c"
       },
       {
-        "label": "공개 계약 public-contract.json",
-        "path": "assets/studio-task-assets/t04-real-information-board/public-contract.json"
+        "label": "public-contract (1).json",
+        "path": "assets/studio-task-assets/t04-originals/public-contract (1).json",
+        "download": true,
+        "sha256": "647d2ea2ce97005aebcbe9ccd62f380bc6efb10967729464bb1df67b3588edeb"
       },
       {
-        "label": "첨부 조건 목록 criterion-registry.json",
-        "path": "assets/studio-task-assets/t04-real-information-board/criterion-registry.json"
-      },
-      {
-        "label": "파일 해시 asset-manifest.json",
-        "path": "assets/studio-task-assets/t04-real-information-board/asset-manifest.json"
+        "label": "asset-manifest (1).json",
+        "path": "assets/studio-task-assets/t04-originals/asset-manifest (1).json",
+        "download": true,
+        "sha256": "8adc0f6caea09e45c8fcdd42e239653e942227e306f688c780a18d441a6b7b41"
       }
     ]
   }

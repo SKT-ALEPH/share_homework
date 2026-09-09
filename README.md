@@ -33,6 +33,6 @@ GitHub 저장소 Settings → Pages에서 `Deploy from a branch`, `main`, `/(roo
 
 `assignments/resources.json`에 과제 번호별 자료 설명과 링크를 등록하면 화면과 전체 복사에 함께 포함됩니다. 복사된 링크는 공개 사이트의 절대 주소입니다.
 
-과제 4의 본문은 사용자가 보낸 27개 기준을 보존합니다. 첨부 공개 계약은 조건 35개와 별도 영수증 요건을 명시하므로, 해당 차이를 화면과 복사문에 안내합니다. 제공된 `orbit-iss-board` ZIP의 `reference/t04-real-information-board-public-v1/`에서 공개 자료 18개만 추출했습니다. 구현 프로젝트는 게시하지 않았습니다. 추출한 README·공개 계약·manifest는 별도 첨부 3개와 바이트 단위로 같으며, manifest의 17개 SHA-256도 일치합니다. 다운로드 ZIP은 이 18개 파일을 다시 묶은 추출본입니다.
+과제 4의 본문은 사용자가 보낸 27개 기준을 보존합니다. 첨부 파일은 원본 ZIP, `README (2).md`, `public-contract (1).json`, `asset-manifest (1).json` 총 4개를 파일명·내용 그대로 게시합니다. ZIP 내부 파일을 따로 추출하거나 다시 압축하지 않습니다. 화면과 전체 복사에는 동일한 원본 4개의 링크만 제공합니다. 각 원본의 SHA-256은 `assignments/resources.json`에 기록되어 있으며 테스트에서 검증합니다.
 
-`assets/studio-task-assets/`는 해시 보존을 위해 Git의 줄바꿈 변환을 끕니다. 자료 수정 시 원본 manifest와의 일치를 다시 검증합니다.
+`assets/studio-task-assets/`는 해시 보존을 위해 Git의 줄바꿈 변환을 끕니다. 자료 수정 시 제공받은 원본과의 일치를 다시 검증합니다.

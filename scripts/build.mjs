@@ -42,7 +42,7 @@ export async function build() {
   for (const [number, resource] of Object.entries(resources)) {
     if (!assignments.some(item => item.number === Number(number))) throw new Error(`과제 ${number}: 자료의 과제가 없습니다.`);
     for (const link of resource.links) {
-      if (!/^assets\/[a-zA-Z0-9_./-]+$/.test(link.path) || link.path.split('/').includes('..')) throw new Error(`잘못된 자료 경로: ${link.path}`);
+      if (!/^assets\/[a-zA-Z0-9_./() -]+$/.test(link.path) || link.path.split('/').includes('..')) throw new Error(`잘못된 자료 경로: ${link.path}`);
       await readFile(resolve(root, link.path));
     }
   }
