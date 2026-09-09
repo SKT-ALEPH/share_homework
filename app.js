@@ -105,7 +105,7 @@ function selectAssignment() {
   $('original-text').textContent = current.raw;
   $('source-info').textContent = `카드 ${current.groups.length}개 · 제약조건 ${current.count}개`;
   $('download').href = `./assignments/${encodeURIComponent(current.source)}`;
-  $('download').download = `과제 ${current.number}.txt`;
+  $('download').download = current.source;
   $('criteria-panel').replaceChildren();
   for (const group of current.groups) {
     const section = document.createElement('section');
