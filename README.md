@@ -28,3 +28,11 @@ GitHub 저장소 Settings → Pages에서 `Deploy from a branch`, `main`, `/(roo
 공개 주소: https://skt-aleph.github.io/share_homework/
 
 외부 글꼴을 불러올 수 없으면 시스템 글꼴로 표시됩니다. 과제 데이터와 기능은 별도 서버 없이 작동합니다.
+
+## 첨부 자료
+
+`assignments/resources.json`에 과제 번호별 자료 설명과 링크를 등록하면 화면과 전체 복사에 함께 포함됩니다. 복사된 링크는 공개 사이트의 절대 주소입니다.
+
+과제 4의 본문은 사용자가 보낸 27개 기준을 보존합니다. 첨부 공개 계약은 조건 35개와 별도 영수증 요건을 명시하므로, 해당 차이를 화면과 복사문에 안내합니다. 제공된 `orbit-iss-board` ZIP의 `reference/t04-real-information-board-public-v1/`에서 공개 자료 18개만 추출했습니다. 구현 프로젝트는 게시하지 않았습니다. 추출한 README·공개 계약·manifest는 별도 첨부 3개와 바이트 단위로 같으며, manifest의 17개 SHA-256도 일치합니다. 다운로드 ZIP은 이 18개 파일을 다시 묶은 추출본입니다.
+
+`assets/studio-task-assets/`는 해시 보존을 위해 Git의 줄바꿈 변환을 끕니다. 자료 수정 시 원본 manifest와의 일치를 다시 검증합니다.

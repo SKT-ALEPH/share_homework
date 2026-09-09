@@ -1,4 +1,5 @@
 const assignments = window.ASSIGNMENTS;
+const resources = window.ASSIGNMENT_RESOURCES || {};
 const $ = id => document.getElementById(id);
 let current;
 let view = 'criteria';
@@ -28,6 +29,31 @@ function groupText(group) {
 }
 function fullCriteria(item) {
   return `과제 ${item.number} — ${item.title}\n\n${item.groups.map(groupText).join('\n\n')}`;
+}
+function fullAssignment(item) {
+  let text = `아래 과제의 주제와 제출물, 카드별 지침, 모든 통과 기준을 반영해 과제를 진행해 주세요.\n\n${item.raw.trim()}`;
+  const resource = resources[item.number];
+  if (resource) {
+    text += `\n\n---\n첨부 자료 안내\n${resource.note}\n\n${resource.description}\n\n`;
+    text += resource.links.map(link => `${link.label}\n${new URL(link.path, 'https://skt-aleph.github.io/share_homework/').href}`).join('\n\n');
+  }
+  return text;
+}
+function drawResources() {
+  const resource = resources[current.number];
+  $('resources').hidden = !resource;
+  $('resource-links').replaceChildren();
+  if (!resource) return;
+  $('resource-note').textContent = resource.note;
+  $('resource-description').textContent = resource.description;
+  for (const item of resource.links) {
+    const link = document.createElement('a');
+    link.href = `./${item.path}`;
+    link.textContent = item.label + (item.download ? ' ↓' : ' ↗');
+    if (item.download) link.download = '';
+    else { link.target = '_blank'; link.rel = 'noreferrer'; }
+    $('resource-links').append(link);
+  }
 }
 function drawNav() {
   const query = $('search').value.toLocaleLowerCase().replace(/\s/g, '');
@@ -114,10 +140,11 @@ function selectAssignment() {
     $('criteria-panel').append(section);
   }
   drawNav();
+  drawResources();
   changeView('criteria');
 }
 $('search').addEventListener('input', drawNav);
-$('copy-assignment').addEventListener('click', () => copy(`아래 과제의 주제와 제출물, 카드별 지침, 모든 통과 기준을 반영해 과제를 진행해 주세요.\n\n${current.raw.trim()}`, `과제 ${current.number}의 주제부터 모든 제약조건까지 복사했습니다. 다른 LLM에 붙여넣으세요.`));
+$('copy-assignment').addEventListener('click', () => copy(fullAssignment(current), `과제 ${current.number}의 주제부터 모든 제약조건까지 복사했습니다. 다른 LLM에 붙여넣으세요.`));
 $('copy-all').addEventListener('click', () => copy(view === 'criteria' ? fullCriteria(current) : current.raw, `과제 ${current.number} ${view === 'criteria' ? '제약조건' : '원문'} 전체를 복사했습니다.`));
 $('close-dialog').addEventListener('click', () => $('copy-dialog').close());
 for (const name of ['criteria', 'original']) {
