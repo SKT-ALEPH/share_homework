@@ -18,7 +18,11 @@ export function parseAssignment(raw, source) {
   const description = content.slice(1, content.indexOf('왜 이걸 하는가')).filter(line => !line.startsWith('계획시간')).join('\n');
   const groups = [];
   const seen = new Set();
+  const checklist = [];
+  let inChecklist = false;
   for (const [index, line] of lines.entries()) {
+    if (line === '완주 체크리스트') inChecklist = true;
+    else if (/^\s*#{1,6}\s+/.test(sourceLines[index]) || line.startsWith('**증거 보관 기준**')) inChecklist = false;
     const card = line.match(/^카드\s+(\d+)\s*[—–-]\s*(.+)$/);
     if (card) groups.push({ number: Number(card[1]), title: card[2], criteria: [] });
     else if (/^\s*####\s+/.test(sourceLines[index]) && lines.slice(index + 1).find(Boolean) === '하는 일') {
@@ -26,11 +30,19 @@ export function parseAssignment(raw, source) {
     }
     const criterion = line.match(/^(T\d+-C\d+)\s+(.+)$/);
     if (!criterion) continue;
-    if (!groups.length) throw new Error(`${source}: 카드 밖에 있는 기준 ${criterion[1]}`);
+    if (!groups.length) {
+      if (!inChecklist) throw new Error(`${source}: 카드 밖에 있는 기준 ${criterion[1]}`);
+      checklist.push({ id: criterion[1], text: criterion[2] });
+      continue;
+    }
     const [, id, text] = criterion;
     if (Number(id.match(/^T(\d+)/)[1]) !== number || seen.has(id)) throw new Error(`${source}: 잘못되거나 중복된 기준 ${id}`);
     seen.add(id);
     groups.at(-1).criteria.push({ id, text });
+  }
+  const criteriaById = new Map(groups.flatMap(group => group.criteria.map(item => [item.id, item.text])));
+  for (const item of checklist) {
+    if (criteriaById.get(item.id) !== item.text) throw new Error(`${source}: 완주 체크리스트와 통과 기준이 일치하지 않습니다: ${item.id}`);
   }
   if (!title || !groups.length || groups.some(group => !group.criteria.length)) throw new Error(`${source}: 제목 또는 통과 기준 누락`);
   return { number, title, time, description, source, groups, count: seen.size, raw };

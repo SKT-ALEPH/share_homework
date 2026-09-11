@@ -14,7 +14,7 @@ test('every source criterion is preserved exactly once, in its original order', 
     const raw = await readFile(new URL(`../assignments/${file}`, import.meta.url), 'utf8');
     const parsed = parseAssignment(raw, file);
     const sourceCriteria = raw.split(/\r?\n/).map(line => line.replace(/^\s*-\s*/, '').trim()).filter(line => /^T\d+-C\d+\s/.test(line));
-    assert.deepEqual(parsed.groups.flatMap(group => group.criteria.map(item => `${item.id} ${item.text}`)), sourceCriteria);
+    assert.deepEqual(parsed.groups.flatMap(group => group.criteria.map(item => `${item.id} ${item.text}`)), [...new Set(sourceCriteria)]);
     assert.deepEqual(generated.find(item => item.number === parsed.number), parsed);
     assert.ok(parsed.count > 0);
   }
@@ -40,6 +40,18 @@ test('unnumbered Markdown sections preserve T09 groups and the gap in criterion 
   assert.equal(item.count, 20);
   assert.deepEqual(item.groups.at(-1).criteria.slice(-2).map(criterion => criterion.id), ['T09-C19', 'T09-C26']);
   assert.equal(item.raw, raw);
+});
+
+test('T10 preserves checklist repetitions in raw text and validates them against the cards', async () => {
+  const raw = await readFile(new URL('../assignments/과제 10.txt', import.meta.url), 'utf8');
+  const item = parseAssignment(raw, '과제 10.txt');
+  assert.equal(item.count, 51);
+  assert.deepEqual(item.groups.map(group => group.criteria.length), [10, 10, 10, 10, 11]);
+  assert.equal(item.raw, raw);
+  assert.equal((item.raw.match(/^- T10-C01 /gm) || []).length, 2);
+  assert.throws(() => parseAssignment(raw.replace('T10-C01 관심 분야가 제출물에 적혀 있다.', 'T10-C01 다른 문구'), 'mismatch'));
+  assert.throws(() => parseAssignment(raw.replace('T10-C01 관심 분야가 제출물에 적혀 있다.', 'T10-C99 누락된 조건'), 'missing'));
+  assert.throws(() => parseAssignment(raw + '\n- T10-C51 중복', 'duplicate'));
 });
 
 test('T04 offers exactly the four original attachments with unchanged names and bytes', async () => {
