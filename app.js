@@ -1,5 +1,11 @@
 const assignments = window.ASSIGNMENTS;
 const resources = window.ASSIGNMENT_RESOURCES || {};
+const prerequisites = {
+  9: {
+    title: 'SKT-ALEPH 사이트에서 내 리추얼 기록을 먼저 받아야 진행할 수 있습니다.',
+    detail: 'SKT-ALEPH 사이트 → 과제 9 → 내 리추얼 기록 → 「텍스트 파일로 담기」를 누르세요. 받은 기록 파일을 준비한 뒤, 아래 과제 전체 내용과 함께 LLM에 넣어 주세요.'
+  }
+};
 const $ = id => document.getElementById(id);
 let current;
 let view = 'criteria';
@@ -31,7 +37,9 @@ function fullCriteria(item) {
   return `과제 ${item.number} — ${item.title}\n\n${item.groups.map(groupText).join('\n\n')}`;
 }
 function fullAssignment(item) {
-  let text = `아래 과제의 주제와 제출물, 카드별 지침, 모든 통과 기준을 반영해 과제를 진행해 주세요.\n\n${item.raw.trim()}`;
+  const prerequisite = prerequisites[item.number];
+  const notice = prerequisite ? `[시작 전 필수 준비]\n${prerequisite.title}\n${prerequisite.detail}\n\n` : '';
+  let text = `${notice}아래 과제의 주제와 제출물, 카드별 지침, 모든 통과 기준을 반영해 과제를 진행해 주세요.\n\n${item.raw.trim()}`;
   const resource = resources[item.number];
   if (resource) {
     text += `\n\n---\n첨부 자료 안내\n${resource.note}\n\n${resource.description}\n\n`;
@@ -101,6 +109,10 @@ function selectAssignment() {
   $('assignment-time').textContent = current.time ? `예상 ${current.time}` : '';
   $('assignment-title').textContent = current.title;
   $('assignment-description').textContent = current.description;
+  const prerequisite = prerequisites[current.number];
+  $('prerequisite').hidden = !prerequisite;
+  $('prerequisite-title').textContent = prerequisite?.title || '';
+  $('prerequisite-detail').textContent = prerequisite?.detail || '';
   $('criteria-count').textContent = current.count;
   $('original-text').textContent = current.raw;
   $('source-info').textContent = `카드 ${current.groups.length}개 · 제약조건 ${current.count}개`;

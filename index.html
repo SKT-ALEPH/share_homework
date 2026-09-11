@@ -7,9 +7,9 @@
   <meta name="description" content="과제별 제약조건을 한곳에서 확인하고, 한 번에 복사하세요.">
   <title>과제 모음 · ALEPH</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=4dfd123207fc">
-  <script src="./data.js?v=04f6c66bf41d" defer></script>
-  <script src="./app.js?v=9932ea90844f" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=5e8c4ae6d190">
+  <script src="./data.js?v=7d38fd49cd57" defer></script>
+  <script src="./app.js?v=5dce62471024" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -28,6 +28,11 @@
       <main id="main" tabindex="-1">
         <div class="intro"><div><p class="eyebrow">ALEPH ASSIGNMENTS</p><h1>과제를 고르고, 한 번에 복사.</h1><p>과제를 한 번 눌러 열고, 전체 복사한 내용을 다른 LLM에 붙여넣으세요.</p></div></div>
         <section class="assignment" aria-labelledby="assignment-title">
+          <aside id="prerequisite" class="prerequisite" aria-labelledby="prerequisite-title" hidden>
+            <p class="prerequisite-label">과제 9 · 시작 전 필수 준비</p>
+            <h2 id="prerequisite-title"></h2>
+            <p id="prerequisite-detail"></p>
+          </aside>
           <div class="assignment-heading"><div class="assignment-meta"><span id="assignment-badge" class="badge"></span><span id="assignment-time"></span></div><h2 id="assignment-title"></h2><div class="copy-package"><button id="copy-assignment" class="button primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>과제 전체 복사</span></button><p>주제 · 제출물 · 카드별 지침 · 모든 제약조건<br><strong>다른 LLM에 그대로 붙여넣으세요.</strong></p></div><div class="topic"><h3>이번 과제의 주제</h3><p id="assignment-description"></p></div></div>
           <div class="toolbar"><div class="tabs" role="tablist" aria-label="보기 방식"><button id="criteria-tab" role="tab" aria-selected="true" aria-controls="criteria-panel" type="button">제약조건 <span id="criteria-count"></span></button><button id="original-tab" role="tab" aria-selected="false" aria-controls="original-panel" tabindex="-1" type="button">원문 전체</button></div><button id="copy-all" class="button secondary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/></svg><span>제약조건만 복사</span></button></div>
           <section id="resources" class="resources" aria-labelledby="resources-title" hidden><h3 id="resources-title">과제에 필요한 자료</h3><p id="resource-note" class="resource-note"></p><p id="resource-description"></p><div id="resource-links"></div></section>
@@ -43,6 +48,6 @@
   <div id="toast" role="status" aria-live="polite"></div>
   <dialog id="copy-dialog"><h2>텍스트 복사</h2><p>자동 복사가 제한되어 있습니다. 아래 내용을 선택해 복사해 주세요.</p><textarea id="manual-copy" readonly aria-label="복사할 텍스트"></textarea><button id="close-dialog" class="button primary" type="button">닫기</button></dialog>
   <noscript>과제 목록을 보려면 JavaScript를 켜 주세요. <a href="./assignments/assignment-01.txt">과제 1 원문</a> · <a href="./assignments/assignment-02.txt">과제 2 원문</a> · <a href="./assignments/assignment-03.txt">과제 3 원문</a> · <a href="./assignments/assignment-04.txt">과제 4 원문</a> · <a href="./assignments/assignment-05.txt">과제 5 원문</a> · <a href="./assignments/assignment-06.txt">과제 6 원문</a> · <a href="./assignments/과제7.txt">과제 7 원문</a></noscript>
-  <noscript><a href="./assignments/과제 8.txt">과제 8 원문</a></noscript>
+  <noscript><a href="./assignments/과제 8.txt">과제 8 원문</a> · <a href="./assignments/과제 9.txt">과제 9 원문</a></noscript>
 </body>
 </html>

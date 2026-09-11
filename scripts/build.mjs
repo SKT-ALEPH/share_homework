@@ -4,10 +4,11 @@ import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const plain = line => line.replace(/^\s*#{1,6}\s*/, '').replace(/^\s*[-*]\s+/, '').trim();
+const plain = line => line.replace(/^\s*#{1,6}\s*/, '').replace(/^\s*[-*]\s+/, '').trim().replace(/^\*\*(.+)\*\*$/, '$1');
 
 export function parseAssignment(raw, source) {
-  const lines = raw.replace(/^\uFEFF/, '').split(/\r?\n/).map(plain);
+  const sourceLines = raw.replace(/^\uFEFF/, '').split(/\r?\n/);
+  const lines = sourceLines.map(plain);
   const first = lines.findIndex(line => /^과제\s*\d+$/.test(line));
   if (first < 0) throw new Error(`${source}: 과제 번호를 찾을 수 없습니다.`);
   const number = Number(lines[first].match(/\d+/)[0]);
@@ -17,9 +18,12 @@ export function parseAssignment(raw, source) {
   const description = content.slice(1, content.indexOf('왜 이걸 하는가')).filter(line => !line.startsWith('계획시간')).join('\n');
   const groups = [];
   const seen = new Set();
-  for (const line of lines) {
+  for (const [index, line] of lines.entries()) {
     const card = line.match(/^카드\s+(\d+)\s*[—–-]\s*(.+)$/);
     if (card) groups.push({ number: Number(card[1]), title: card[2], criteria: [] });
+    else if (/^\s*####\s+/.test(sourceLines[index]) && lines.slice(index + 1).find(Boolean) === '하는 일') {
+      groups.push({ number: groups.length + 1, title: line, criteria: [] });
+    }
     const criterion = line.match(/^(T\d+-C\d+)\s+(.+)$/);
     if (!criterion) continue;
     if (!groups.length) throw new Error(`${source}: 카드 밖에 있는 기준 ${criterion[1]}`);

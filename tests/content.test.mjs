@@ -26,6 +26,22 @@ test('malformed or duplicate criteria stop publication instead of disappearing s
   assert.throws(() => parseAssignment('과제 1\n제목\n왜 이걸 하는가\n카드 1 — 검사\nT02-C01 잘못된 과제', 'test'));
 });
 
+test('unnumbered Markdown sections preserve T09 groups and the gap in criterion IDs', async () => {
+  const raw = await readFile(new URL('../assignments/과제 9.txt', import.meta.url), 'utf8');
+  const item = parseAssignment(raw, '과제 9.txt');
+  assert.equal(item.number, 9);
+  assert.deepEqual(item.groups.map(group => [group.title, group.criteria.length]), [
+    ['내 기록을 먼저 읽기', 2],
+    ['에이전트에게 다섯 가지 규칙 주기', 3],
+    ['강점 지도 뽑고, 틀린 것 지우기', 5],
+    ['나의 회복탄력성: 고난을 통해 더 나아진 나', 3],
+    ['자기소개서 초안과 포트폴리오 뼈대', 7]
+  ]);
+  assert.equal(item.count, 20);
+  assert.deepEqual(item.groups.at(-1).criteria.slice(-2).map(criterion => criterion.id), ['T09-C19', 'T09-C26']);
+  assert.equal(item.raw, raw);
+});
+
 test('T04 offers exactly the four original attachments with unchanged names and bytes', async () => {
   const resources = JSON.parse(await readFile(new URL('../assignments/resources.json', import.meta.url), 'utf8'));
   const links = resources['4'].links;
