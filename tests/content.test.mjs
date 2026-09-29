@@ -54,6 +54,16 @@ test('T10 preserves checklist repetitions in raw text and validates them against
   assert.throws(() => parseAssignment(raw + '\n- T10-C51 중복', 'duplicate'));
 });
 
+test('T11 accepts the 제 11 heading and preserves every criterion', async () => {
+  const raw = await readFile(new URL('../assignments/과제 11.txt', import.meta.url), 'utf8');
+  const item = parseAssignment(raw, '과제 11.txt');
+  assert.equal(item.number, 11);
+  assert.equal(item.count, 39);
+  assert.equal(item.groups.length, 5);
+  assert.equal(item.title, '나에 대한 3만 자 장편소설 — 내 삶을 소재로, 진한 감동의 서사');
+  assert.equal(item.raw, raw);
+});
+
 test('T04 offers exactly the four original attachments with unchanged names and bytes', async () => {
   const resources = JSON.parse(await readFile(new URL('../assignments/resources.json', import.meta.url), 'utf8'));
   const links = resources['4'].links;

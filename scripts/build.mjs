@@ -9,7 +9,7 @@ const plain = line => line.replace(/^\s*#{1,6}\s*/, '').replace(/^\s*[-*]\s+/, '
 export function parseAssignment(raw, source) {
   const sourceLines = raw.replace(/^\uFEFF/, '').split(/\r?\n/);
   const lines = sourceLines.map(plain);
-  const first = lines.findIndex(line => /^과제\s*\d+$/.test(line));
+  const first = lines.findIndex(line => /^(?:과제|제)\s*\d+$/.test(line));
   if (first < 0) throw new Error(`${source}: 과제 번호를 찾을 수 없습니다.`);
   const number = Number(lines[first].match(/\d+/)[0]);
   const content = lines.slice(first + 1).filter(Boolean);
