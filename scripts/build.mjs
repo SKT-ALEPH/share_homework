@@ -9,12 +9,12 @@ const plain = line => line.replace(/^\s*#{1,6}\s*/, '').replace(/^\s*[-*]\s+/, '
 export function parseAssignment(raw, source) {
   const sourceLines = raw.replace(/^\uFEFF/, '').split(/\r?\n/);
   const lines = sourceLines.map(plain);
-  const first = lines.findIndex(line => /^(?:과제|제)\s*\d+$/.test(line) || line === '마지막 과제 BR-A');
+  const first = lines.findIndex(line => /^(?:과제|제)\s*\d+$/.test(line) || /^마지막 과제 BR-[AB]$/.test(line));
   if (first < 0) throw new Error(`${source}: 과제 번호를 찾을 수 없습니다.`);
-  const finalA = lines[first] === '마지막 과제 BR-A';
-  const number = finalA ? 12 : Number(lines[first].match(/\d+/)[0]);
-  const slug = finalA ? 'br-a' : String(number);
-  const label = finalA ? 'BR-A' : `과제 ${number}`;
+  const finalLetter = lines[first].match(/^마지막 과제 BR-([AB])$/)?.[1];
+  const number = finalLetter ? (finalLetter === 'A' ? 12 : 13) : Number(lines[first].match(/\d+/)[0]);
+  const slug = finalLetter ? `br-${finalLetter.toLowerCase()}` : String(number);
+  const label = finalLetter ? `BR-${finalLetter}` : `과제 ${number}`;
   const content = lines.slice(first + 1).filter(Boolean);
   const title = content[0];
   const time = content.find(line => line.startsWith('계획시간'))?.replace(/^계획시간\s*/, '') || '';
@@ -31,7 +31,7 @@ export function parseAssignment(raw, source) {
     else if (/^\s*####\s+/.test(sourceLines[index]) && lines.slice(index + 1).find(Boolean) === '하는 일') {
       groups.push({ number: groups.length + 1, title: line, criteria: [] });
     }
-    const criterion = line.match(/^((?:T\d+|BRA)-C\d+)\s+(.+)$/);
+    const criterion = line.match(/^((?:T\d+|BR[AB])-C\d+)\s+(.+)$/);
     if (!criterion) continue;
     if (!groups.length) {
       if (!inChecklist) throw new Error(`${source}: 카드 밖에 있는 기준 ${criterion[1]}`);
@@ -39,7 +39,7 @@ export function parseAssignment(raw, source) {
       continue;
     }
     const [, id, text] = criterion;
-    const matchingAssignment = finalA ? id.startsWith('BRA-C') : Number(id.match(/^T(\d+)/)?.[1]) === number;
+    const matchingAssignment = finalLetter ? id.startsWith(`BR${finalLetter}-C`) : Number(id.match(/^T(\d+)/)?.[1]) === number;
     if (!matchingAssignment || seen.has(id)) throw new Error(`${source}: 잘못되거나 중복된 기준 ${id}`);
     seen.add(id);
     groups.at(-1).criteria.push({ id, text });

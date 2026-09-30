@@ -8,6 +8,10 @@ const prerequisites = {
   12: {
     title: '본인의 리추얼 기록 JSON을 먼저 받아야 마지막 A를 진행할 수 있습니다.',
     detail: 'SKT-ALEPH 사이트 → 마지막 A → 「내 리추얼 기록 · JSON 받기」 → 「JSON으로 담기」를 누르세요. 받은 파일을 확인해 다른 사람의 이름을 직접 지운 뒤 사용하세요.'
+  },
+  13: {
+    title: '마지막 A가 최종 확정된 뒤 마지막 B를 시작하세요.',
+    detail: '10번 논문의 결과를 앱에 반영하고, 완성한 앱을 12번 사이트의 대표작 자리에 연결합니다.'
   }
 };
 const $ = id => document.getElementById(id);
@@ -78,7 +82,7 @@ function drawNav() {
     if (item.number === current.number) link.setAttribute('aria-current', 'page');
     const num = document.createElement('span');
     num.className = 'nav-number';
-    num.textContent = item.number === 12 ? 'A' : String(item.number).padStart(2, '0');
+    num.textContent = item.slug.startsWith('br-') ? item.slug.slice(-1).toUpperCase() : String(item.number).padStart(2, '0');
     const text = document.createElement('span');
     const label = document.createElement('strong');
     label.textContent = item.label;
@@ -109,7 +113,7 @@ function selectAssignment() {
   current = assignments.find(item => item.slug === slug) || assignments[0];
   document.title = `${current.label} · ${current.title} | ALEPH`;
   $('assignment-count').textContent = assignments.length;
-  $('assignment-badge').textContent = current.number === 12 ? 'FINAL BR-A' : `ASSIGNMENT ${String(current.number).padStart(2, '0')}`;
+  $('assignment-badge').textContent = current.slug.startsWith('br-') ? `FINAL ${current.label}` : `ASSIGNMENT ${String(current.number).padStart(2, '0')}`;
   $('assignment-time').textContent = current.time ? `예상 ${current.time}` : '';
   $('assignment-title').textContent = current.title;
   $('assignment-description').textContent = current.description;

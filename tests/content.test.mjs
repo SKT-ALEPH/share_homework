@@ -13,7 +13,7 @@ test('every source criterion is preserved exactly once, in its original order', 
   for (const file of files) {
     const raw = await readFile(new URL(`../assignments/${file}`, import.meta.url), 'utf8');
     const parsed = parseAssignment(raw, file);
-    const sourceCriteria = raw.split(/\r?\n/).map(line => line.replace(/^\s*-\s*/, '').trim()).filter(line => /^(?:T\d+|BRA)-C\d+\s/.test(line));
+    const sourceCriteria = raw.split(/\r?\n/).map(line => line.replace(/^\s*-\s*/, '').trim()).filter(line => /^(?:T\d+|BR[AB])-C\d+\s/.test(line));
     assert.deepEqual(parsed.groups.flatMap(group => group.criteria.map(item => `${item.id} ${item.text}`)), [...new Set(sourceCriteria)]);
     assert.deepEqual(generated.find(item => item.number === parsed.number), parsed);
     assert.ok(parsed.count > 0);
@@ -74,6 +74,18 @@ test('BR-A keeps its own label, five sections, and all fifteen criteria', async 
   assert.deepEqual(item.groups.map(group => group.criteria.length), [2, 2, 2, 2, 7]);
   assert.equal(item.raw, raw);
   assert.ok(!raw.includes('31일 · 아침 31'));
+});
+
+test('BR-B keeps the final assignment label and all sixteen criteria', async () => {
+  const raw = await readFile(new URL('../assignments/마지막 B.txt', import.meta.url), 'utf8');
+  const item = parseAssignment(raw, '마지막 B.txt');
+  assert.equal(item.number, 13);
+  assert.equal(item.slug, 'br-b');
+  assert.equal(item.label, 'BR-B');
+  assert.equal(item.count, 16);
+  assert.deepEqual(item.groups.map(group => group.criteria.length), [2, 3, 2, 2, 7]);
+  assert.equal(item.raw, raw);
+  assert.throws(() => parseAssignment(raw.replace('BRB-C01', 'BRA-C01'), 'wrong-prefix'));
 });
 
 test('T04 offers exactly the four original attachments with unchanged names and bytes', async () => {
