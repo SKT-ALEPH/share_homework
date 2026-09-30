@@ -9,9 +9,12 @@ const plain = line => line.replace(/^\s*#{1,6}\s*/, '').replace(/^\s*[-*]\s+/, '
 export function parseAssignment(raw, source) {
   const sourceLines = raw.replace(/^\uFEFF/, '').split(/\r?\n/);
   const lines = sourceLines.map(plain);
-  const first = lines.findIndex(line => /^(?:과제|제)\s*\d+$/.test(line));
+  const first = lines.findIndex(line => /^(?:과제|제)\s*\d+$/.test(line) || line === '마지막 과제 BR-A');
   if (first < 0) throw new Error(`${source}: 과제 번호를 찾을 수 없습니다.`);
-  const number = Number(lines[first].match(/\d+/)[0]);
+  const finalA = lines[first] === '마지막 과제 BR-A';
+  const number = finalA ? 12 : Number(lines[first].match(/\d+/)[0]);
+  const slug = finalA ? 'br-a' : String(number);
+  const label = finalA ? 'BR-A' : `과제 ${number}`;
   const content = lines.slice(first + 1).filter(Boolean);
   const title = content[0];
   const time = content.find(line => line.startsWith('계획시간'))?.replace(/^계획시간\s*/, '') || '';
@@ -28,7 +31,7 @@ export function parseAssignment(raw, source) {
     else if (/^\s*####\s+/.test(sourceLines[index]) && lines.slice(index + 1).find(Boolean) === '하는 일') {
       groups.push({ number: groups.length + 1, title: line, criteria: [] });
     }
-    const criterion = line.match(/^(T\d+-C\d+)\s+(.+)$/);
+    const criterion = line.match(/^((?:T\d+|BRA)-C\d+)\s+(.+)$/);
     if (!criterion) continue;
     if (!groups.length) {
       if (!inChecklist) throw new Error(`${source}: 카드 밖에 있는 기준 ${criterion[1]}`);
@@ -36,7 +39,8 @@ export function parseAssignment(raw, source) {
       continue;
     }
     const [, id, text] = criterion;
-    if (Number(id.match(/^T(\d+)/)[1]) !== number || seen.has(id)) throw new Error(`${source}: 잘못되거나 중복된 기준 ${id}`);
+    const matchingAssignment = finalA ? id.startsWith('BRA-C') : Number(id.match(/^T(\d+)/)?.[1]) === number;
+    if (!matchingAssignment || seen.has(id)) throw new Error(`${source}: 잘못되거나 중복된 기준 ${id}`);
     seen.add(id);
     groups.at(-1).criteria.push({ id, text });
   }
@@ -45,7 +49,7 @@ export function parseAssignment(raw, source) {
     if (criteriaById.get(item.id) !== item.text) throw new Error(`${source}: 완주 체크리스트와 통과 기준이 일치하지 않습니다: ${item.id}`);
   }
   if (!title || !groups.length || groups.some(group => !group.criteria.length)) throw new Error(`${source}: 제목 또는 통과 기준 누락`);
-  return { number, title, time, description, source, groups, count: seen.size, raw };
+  return { number, slug, label, title, time, description, source, groups, count: seen.size, raw };
 }
 
 export async function build() {
@@ -70,6 +74,6 @@ export async function build() {
     html = html.replace(pattern, `./${asset}?v=${digest}`);
   }
   await writeFile(resolve(root, 'index.html'), html);
-  console.log(assignments.map(item => `과제 ${item.number}: ${item.count}개 기준`).join('\n'));
+  console.log(assignments.map(item => `${item.label}: ${item.count}개 기준`).join('\n'));
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await build();

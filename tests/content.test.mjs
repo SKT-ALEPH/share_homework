@@ -13,7 +13,7 @@ test('every source criterion is preserved exactly once, in its original order', 
   for (const file of files) {
     const raw = await readFile(new URL(`../assignments/${file}`, import.meta.url), 'utf8');
     const parsed = parseAssignment(raw, file);
-    const sourceCriteria = raw.split(/\r?\n/).map(line => line.replace(/^\s*-\s*/, '').trim()).filter(line => /^T\d+-C\d+\s/.test(line));
+    const sourceCriteria = raw.split(/\r?\n/).map(line => line.replace(/^\s*-\s*/, '').trim()).filter(line => /^(?:T\d+|BRA)-C\d+\s/.test(line));
     assert.deepEqual(parsed.groups.flatMap(group => group.criteria.map(item => `${item.id} ${item.text}`)), [...new Set(sourceCriteria)]);
     assert.deepEqual(generated.find(item => item.number === parsed.number), parsed);
     assert.ok(parsed.count > 0);
@@ -62,6 +62,18 @@ test('T11 accepts the 제 11 heading and preserves every criterion', async () =>
   assert.equal(item.groups.length, 5);
   assert.equal(item.title, '나에 대한 3만 자 장편소설 — 내 삶을 소재로, 진한 감동의 서사');
   assert.equal(item.raw, raw);
+});
+
+test('BR-A keeps its own label, five sections, and all fifteen criteria', async () => {
+  const raw = await readFile(new URL('../assignments/마지막 A.txt', import.meta.url), 'utf8');
+  const item = parseAssignment(raw, '마지막 A.txt');
+  assert.equal(item.number, 12);
+  assert.equal(item.slug, 'br-a');
+  assert.equal(item.label, 'BR-A');
+  assert.equal(item.count, 15);
+  assert.deepEqual(item.groups.map(group => group.criteria.length), [2, 2, 2, 2, 7]);
+  assert.equal(item.raw, raw);
+  assert.ok(!raw.includes('31일 · 아침 31'));
 });
 
 test('T04 offers exactly the four original attachments with unchanged names and bytes', async () => {
